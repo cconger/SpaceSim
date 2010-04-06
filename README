@@ -1,0 +1,117 @@
+Project Summary -
+
+The game world I'm hoping to build is an extension of my Asteroids
+project at the beginning of the semester.  it will be a space
+simulator that will allow for movement and combat in space.  I'm
+planning to deliver a horizontal slice of the game environment I'm
+anticipating building.  This will include elements like gravity
+interactions (between ships and stars and ships <=> ships) this will
+be generated manually to manage the scale of the universe and ships I
+intend to build.
+
+The 3D Models will be low priority designs and will probably be done
+as spheres until late in development cycle with an emphasis on the
+interaction between weapons and the ships instead of the visual models
+themselves.
+
+Some elements I intend to add to make this a different game than
+others I'm hoping to enable a shield/weapon/engine trade off system.
+Each ship has a finite amount of "energy" that they must distribute
+between the demands of the ship.  In addition to budgeting, you can
+also "overdrive" each of these elements which would allow increased
+performance between them. Also to allow you to overdrive things, you
+can under power them.
+
+This will be a complex control scheme that will require a in-depth
+UI to give the player a view of the state of their ship.  The UI will
+have to present total power available, power consumption itemized by
+demanding system. Additionally I want to present a simple UI-radar to
+present the items in the universe around them. Finally there needs to
+be a UI to display speed, heading, and damage taken (which should
+    impact the energy generation).
+
+
+Asset List -
+  - Fighter Ship 3D Model
+- Larger Ship 3D Model           (REACH GOAL)
+  - Rocket Model
+  - Lazer Model
+  - Particle effects for dmg
+  - Particle effects for engines.
+- Particle effects for shield    (REACH GOAL)
+  - UI Elements
+  - 3D Radar
+  - Power Meters
+- Lock-on Overlay   (REACH GOAL)
+  - Textures :
+  - Skybox
+  - Planets
+- Star (light interactions)
+  - UI Elements
+
+
+  The way I will present my Blue Sky/Murphy's Law Plan will be by
+  listing feature I hope to include in order.  The Murphy's law plan
+  will be a cut-off point which will demonstrate what I want to include
+  as a BASELINE, and each feature listed after that cutoff is a
+  "Nice-to-have" feature and part of the blue-sky plan.
+
+  ==================================
+  Mocking out the Classes required and the mapping of class => scene
+  graph Including communication architecture.
+
+  Drop in Simple "Sphere" ships and enable simple Force Driven movement
+  - Once the force logic is in place I can register gravity as
+  constant force applied
+
+  Drop in "Planets"
+
+  Add the power creation and draw registration system.
+
+  Add Weapons (no models) and engines (no effects).
+
+  Add damage mechanics for the ship - Reducing energy production, and
+  finally destruction.
+
+  Add Controls for new mechanics.
+
+  Add Models for Weapons.
+
+  Build UI for Speed, Heading, Energy, Damage. (Roughed out as text)
+
+  Add Effects for Engines, Add Effects for Damage.
+
+  Add Model for ship.
+
+  Reset the game when you die, increment kill counter when you kill them (NO AI!)
+
+  -----------------------------------
+  MURPHY'S LAW MAKES ME END HERE
+  -----------------------------------
+
+  Add Splash Damage to rockets
+
+  Add Shield that only collides a certain % of the time, or until dmg cap reached.
+
+  Add Shield Effect (only shows Texture on impacts)
+
+  Add Rocket-Locking System
+
+  Add Complex Visual UI for Dmg, Energy, and Lock-on System
+
+  ==================================
+  Listing these just for fun now...
+  ==================================
+  Add Modular Damage - allow targeting engines/weapons
+
+  Add Large Ship
+  - different power schema
+  - new model
+
+  Add Ship Collision (Kamikaze attacks) and planet collisions.
+
+  Add Cloaking
+
+  Add Repairing (A huge energy draw so it disables you for a while)
+
+  Add AI For the opponent.
