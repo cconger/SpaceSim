@@ -1,0 +1,2 @@
+class Lazer(Weapon):
+  pass

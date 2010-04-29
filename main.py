@@ -1,9 +1,14 @@
 from Ship import Ship
 
-from math                     import pi, sin, cos
-from direct.showbase.ShowBase import ShowBase
-from direct.task              import Task
-from panda3d.core             import CompassEffect
+from math                         import pi, sin, cos
+from direct.showbase.ShowBase     import ShowBase
+from direct.showbase.DirectObject import DirectObject
+from pandac.PandaModules          import *
+from direct.task                  import Task
+from panda3d.core                 import CompassEffect
+
+CAMERA_RADIUS = 30
+
 
 class SpaceSimulator(ShowBase):
   """World class for capturing everything in the universe
@@ -14,42 +19,54 @@ class SpaceSimulator(ShowBase):
     self.keyMap = {"left":False, "right":False, "forward":False, "reverse":False, "turn-left":False, "turn-right":False, "lazers":False, "rockets":False}
 
     self.disableMouse()
+    self.enableParticles()
+
+    # Hide the Cursor
+    props = WindowProperties()
+    props.setCursorHidden(True)
+    self.win.requestProperties(props)
+
+    self.angleInt = AngularEulerIntegrator()
+    self.physicsMgr.attachAngularIntegrator(self.angleInt)
 
     Ship.shipNode = self.render.attachNewNode("ShipNode")
 
-    self.player = Ship()
+    self.player = Ship(self)
 
     self.loadSkyBox()
+    self.drawLines()
 
-    self.camera.reparentTo(self.player.modelNP)
-    self.camera.setPos(0,-14,1)
+    # Set Camera behind the actor
+    self.cameraH = 270
+    self.cameraP = 18
+    self.camera.reparentTo(self.player.actorNP)
+    self.camera.setPos(0,-CAMERA_RADIUS,3)
 
-#====CONTROLS==================================================================
-    self.accept('w',           self.setKey,      ["forward",True])
-    self.accept('w-up',        self.setKey,      ["forward",False])
-    self.accept('a',           self.setKey,      ["left",True])
-    self.accept('a-up',        self.setKey,      ["left",False])
-    self.accept('s',           self.setKey,      ["reverse",True])
-    self.accept('s-up',        self.setKey,      ["reverse",False])
-    self.accept('d',           self.setKey,      ["right",True])
-    self.accept('d-up',        self.setKey,      ["right",False])
-    self.accept('q',           self.setKey,      ["turn-left",True])
-    self.accept('q-up',        self.setKey,      ["turn-left",False])
-    self.accept('e',           self.setKey,      ["turn-right",True])
-    self.accept('e-up',        self.setKey,      ["turn-right",False])
-    self.accept('space',       self.setKey,      ["lazers",True])
-    self.accept('right-shift', self.setKey,      ["rocket", True])
+    # Add Simple Shaders and Lights
+    #self.render.setShaderAuto()
+    #self.render.setAttrib(LightRampAttrib.makeHdr1())
+    #ambientLight = AmbientLight("ambientLight")
+    #ambientLight.setColor(Vec4(.5,.5,.5,1))
+    #self.render.setLight(self.render.attachNewNode(ambientLight))
 
-#====REGISTER TASKS============================================================
+    #====CONTROLS=============================================================
+    self.accept('space',          self.player.enableThruster)
+    self.accept('space-up',       self.player.disableThruster)
+    self.accept('arrow_up',       self.player.setPitch, [-1])
+    self.accept('arrow_up-up',    self.player.setPitch, [0])
+    self.accept('arrow_down',     self.player.setPitch, [1])
+    self.accept('arrow_down-up',  self.player.setPitch, [0])
+    self.accept('arrow_right',    self.player.setTurn,  [-1])
+    self.accept('arrow_right-up', self.player.setTurn,  [0])
+    self.accept('arrow_left',     self.player.setTurn, [1])
+    self.accept('arrow_left-up',  self.player.setTurn, [0])
+
+    #====REGISTER TASKS=======================================================
     self.controlTask = taskMgr.add(self.movement, "controlTask")
     self.controlTask.lastTime = 0
 
     self.energyTask = taskMgr.add(Ship.updateEnergyTask, "energyTask")
     self.energyTask.lastTime = 0
-
-  def setKey(self, key, value):
-    """For modifying currently held keys"""
-    self.keyMap[key] = value
 
   def loadSkyBox(self):
     """Loads and centers the skybox."""
@@ -65,7 +82,55 @@ class SpaceSimulator(ShowBase):
     elapsed = task.time - task.lastTime
     task.lastTime = task.time
 
+    #===CAMERA CONTROL=========================================================
+    if base.mouseWatcherNode.hasMouse():
+      md = base.win.getPointer(0)
+      x = md.getX()
+      y = md.getY()
+      deltaX = (md.getX() - 200) / 2
+      deltaY = (md.getY() - 200) / 2
+
+      self.cameraH = (self.cameraH + deltaX) % 360
+      self.cameraP = ((self.cameraP + deltaY + 90) % 180) - 90
+
+      print self.cameraH
+      print self.cameraP
+      print ""
+
+      base.win.movePointer(0,200,200)
+
+    #TODO: Fix camera control...
+    Hrad = self.cameraH * (pi / 180)
+    Prad = self.cameraP * (pi / 180)
+    self.camera.setPos( CAMERA_RADIUS * cos(Hrad),
+                        CAMERA_RADIUS * sin(Hrad),
+                        CAMERA_RADIUS * sin(Prad))
+
+    self.camera.lookAt(self.player.actorNP)
+
     return Task.cont
 
-application = SpaceSimulator()
-application.run()
+  def drawLines(self):
+    def printText(name, message, color):
+      text = TextNode(name)
+      text.setText(message)
+      x,y,z = color
+      text.setTextColor(x,y,z,1)
+      text3d = NodePath(text)
+      text3d.reparentTo(render)
+      return text3d
+
+    for i in xrange(0,51):
+      printText("X", "|", (1,0,0)).setPos(i,0,0)
+      printText("Y", "|", (0,1,0)).setPos(0,i,0)
+      printText("Z", "-", (0,0,1)).setPos(0,0,i)
+
+    printText("XL", "X", (0,0,0)).setPos(5.5,0,0)
+    printText("YL", "Y", (0,0,0)).setPos(0,5.5,0)
+    printText("ZL", "Z", (0,0,0)).setPos(0,0,5.5)
+    printText("OL", "@", (0,0,0)).setPos(0,0,0)
+    print "Displaying DEBUG Lines"
+
+if __name__ == "__main__":
+  application = SpaceSimulator()
+  application.run()

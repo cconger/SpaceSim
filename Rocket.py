@@ -1,2 +1,2 @@
-class Rocket():
+class Rocket(Weapon):
   pass
