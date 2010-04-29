@@ -30,64 +30,54 @@ present the items in the universe around them. Finally there needs to
 be a UI to display speed, heading, and damage taken (which should
     impact the energy generation).
 
-
-Asset List -
+===================================================
+ACTUAL ASSET LIST -
   - Fighter Ship 3D Model
-- Larger Ship 3D Model           (REACH GOAL)
   - Rocket Model
-  - Lazer Model
-  - Particle effects for dmg
-  - Particle effects for engines.
-- Particle effects for shield    (REACH GOAL)
-  - UI Elements
-  - 3D Radar
-  - Power Meters
-- Lock-on Overlay   (REACH GOAL)
-  - Textures :
+  - Laser model
   - Skybox
-  - Planets
-- Star (light interactions)
-  - UI Elements
+  - Planet
 
+===================================================
+EXECUTION PLAN
 
-  The way I will present my Blue Sky/Murphy's Law Plan will be by
-  listing feature I hope to include in order.  The Murphy's law plan
-  will be a cut-off point which will demonstrate what I want to include
-  as a BASELINE, and each feature listed after that cutoff is a
-  "Nice-to-have" feature and part of the blue-sky plan.
+  Mock out the Classes required and mapping of class => scene graph
 
-  ==================================
-  Mocking out the Classes required and the mapping of class => scene
-  graph Including communication architecture.
+  Enable Physics interactions on ships.
 
-  Drop in Simple "Sphere" ships and enable simple Force Driven movement
-  - Once the force logic is in place I can register gravity as
-  constant force applied
+  Add power creation and draw registration system.
+    Half complete...
 
-  Drop in "Planets"
+  Add Weapons
+    Models and Object Strucutre Done.
 
-  Add the power creation and draw registration system.
+  Add Controls
 
-  Add Weapons (no models) and engines (no effects).
+  Add Model for Ship, Weapons, and Planets
 
-  Add damage mechanics for the ship - Reducing energy production, and
-  finally destruction.
+  --------------------------------------
+    MURPHEY'S LAW HITS HARD
+  --------------------------------------
 
-  Add Controls for new mechanics.
+  Add Weapon Movement and Collision
 
-  Add Models for Weapons.
+  Add Weapon Launching from "LaunchPads"
 
-  Build UI for Speed, Heading, Energy, Damage. (Roughed out as text)
+  Add Controls for Weapons
 
-  Add Effects for Engines, Add Effects for Damage.
+  Add UI for Speed, heading, energy
 
-  Add Model for ship.
+  Add Damage Mechanic
 
-  Reset the game when you die, increment kill counter when you kill them (NO AI!)
+  Add UI for Damage
 
-  -----------------------------------
-  MURPHY'S LAW MAKES ME END HERE
-  -----------------------------------
+  Build Rough game Elements:
+    - spawn a ship randomly and give points for killing
+    - print and reset score/game when dead
+  
+  ----------------------------------
+  EVEN MORE FUTURE PLANS
+  ----------------------------------
 
   Add Splash Damage to rockets
 
@@ -99,9 +89,6 @@ Asset List -
 
   Add Complex Visual UI for Dmg, Energy, and Lock-on System
 
-  ==================================
-  Listing these just for fun now...
-  ==================================
   Add Modular Damage - allow targeting engines/weapons
 
   Add Large Ship
@@ -115,3 +102,16 @@ Asset List -
   Add Repairing (A huge energy draw so it disables you for a while)
 
   Add AI For the opponent.
+
+==============================================================================
+Problems and work-arounds:
+  Using built in physics engine.  Followed tutorial from reference manual.
+  Borrowed some of my camera logic from the Third Person Better Ralph exable
+    http://www.panda3d.org/phpbb2/viewtopic.php?t=8452
+
+  Borrowed Frame of Reference grid from:
+    http://code.google.com/p/python-panda3d-examples/wiki/PandaCoords
+
+  Models built (ickily) in Blender.
+
+  LOTS or referral to the Panda3d forums and reference pages.
